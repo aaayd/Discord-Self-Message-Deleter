@@ -5,8 +5,6 @@ from colorama import Fore, Style
 token = "" # Put Token Here
 prefix = "!" 
 
-
-
 client = commands.Bot(command_prefix=prefix, self_bot=True)
 client.remove_command("help")
 
@@ -17,9 +15,15 @@ async def on_ready():
 
 @client.command()
 async def clr(ctx, limit: int=None):
-    nukee = str(ctx.message.channel).split(' ')[3]
+    try:
+        nukee = str(ctx.message.channel).split(' ')[3]
+        print (f"{Fore.BLUE}[!]{Style.RESET_ALL} Nuking DM's with: {Fore.BLUE}{nukee}{Style.RESET_ALL}")
+    
+    except IndexError:
+        channel_str = ctx.message.channel
+        print (f"{Fore.BLUE}[!]{Style.RESET_ALL} Nuking messages in : {Fore.BLUE}#{channel_str}{Style.RESET_ALL}")
 
-    print (f"{Fore.BLUE}[!]{Style.RESET_ALL} Nuking DM's with: {Fore.BLUE}{nukee}{Style.RESET_ALL}")
+
     async for msg in ctx.message.channel.history(limit=limit):
         if msg.author.id == client.user.id:
             try:
@@ -28,5 +32,5 @@ async def clr(ctx, limit: int=None):
                 pass
 
     print(f"{Fore.GREEN}[!] Nuke Complete{Style.RESET_ALL}")
-    
+
 client.run(token, bot=False)
