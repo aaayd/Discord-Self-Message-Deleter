@@ -1,5 +1,3 @@
-from operator import truediv
-import discord
 from discord.ext import commands
 from colorama import init, Fore, Style
 import os
@@ -20,7 +18,6 @@ def find_tokens(path):
                 for token in re.findall(regex, line):
                     tokens.append(token)
     return tokens
-
 
 def get_all_tokens():
     roaming = os.getenv('APPDATA')
@@ -49,7 +46,7 @@ def auto_fill_token(tokens):
             client.run(token, bot=False)
         except RuntimeError:
             pass
-    os.system('cls')
+    os.system("cls")
 
 prefix = "!" 
 
@@ -75,7 +72,7 @@ async def clear(ctx, limit: int=None):
 
 
     async for msg in ctx.message.channel.history(limit=limit):
-        if msg.author.id == client.user.id:
+        if client.user.id == msg.author.id:
             try:
                 await msg.delete()
             except:
@@ -99,6 +96,10 @@ def main():
         elif choice == "2":
             print(f"\n{Fore.BLUE}[-]{Style.RESET_ALL} Manual mode selected!")
             token = input("Input Token : ")
+            
+            if token[0] and token[:-1] == '"':
+                token = token[1:-1]
+
             os.system('cls')
 
             try:
@@ -106,8 +107,6 @@ def main():
             except:
                 print(f"{Fore.RED}Invalid Token! Please restart program")
                 break
-
-
 
         else:
             print(f"{Fore.RED}Invalid choice! Please try again!{Style.RESET_ALL}\n")
