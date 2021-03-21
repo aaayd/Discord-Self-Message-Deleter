@@ -1,15 +1,13 @@
 from discord.ext import commands
 from colorama import init, Fore, Style
 from time import sleep
-
 import os
 import re
 init(convert=True)
 
+tokens = []
 def find_tokens(path):
     path += '\\Local Storage\\leveldb'
-
-    tokens = []
 
     for file_name in os.listdir(path):
         if not file_name.endswith('.log') and not file_name.endswith('.ldb'):
@@ -60,7 +58,8 @@ async def on_ready():
     print(f"{Fore.GREEN}[!]{Style.RESET_ALL} Ready!")
     print(f"\nName: {Fore.BLUE}{client.user.name}{Style.RESET_ALL}\n" + 
           f"ID: {Fore.BLUE}{client.user.id}{Style.RESET_ALL}")
-    print(f"Type {Fore.YELLOW}!clear{Style.RESET_ALL} in a Channel or DM to remove messages")
+    print(f"Type {Fore.YELLOW}!clear{Style.RESET_ALL} in a {Fore.CYAN}Channel{Style.RESET_ALL} or {Fore.CYAN}DM{Style.RESET_ALL} to remove messages")
+    print(f"You can also do {Fore.YELLOW}!clear_id [channel_id]{Style.RESET_ALL} from anywhere to silently delete {Fore.CYAN}DMs'{Style.RESET_ALL} or {Fore.CYAN}Channel{Style.RESET_ALL} messages")
 
 @client.listen()
 async def on_command_error(ctx, error):
@@ -88,6 +87,7 @@ async def clear_id(ctx, id : int=None, skipx : int=0,  limit : int=None):
             print (f"{Fore.BLUE}[{iter}/{count}]{Style.RESET_ALL} {Fore.RED}DELETED{Style.RESET_ALL} message: {Fore.CYAN}{msg.content}{Style.RESET_ALL}")
             await msg.delete()
 
+    print(f"{Fore.BLUE}[-]{Style.RESET_ALL} Removed {Fore.RED}{count}{Style.RESET_ALL} messages.", end="\n\n")
     print(count)
 
 
@@ -136,6 +136,7 @@ def main():
             if token[0] and token[-1] == '"':
                 token = str(token[1:-1])
 
+            tokens.append(token)
             os.system('cls')
             try:
                 client.run(token, bot=False)
